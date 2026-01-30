@@ -123,7 +123,8 @@ export function generatePatientTimeline(patient: Patient, studies: Study[]): Tim
     })
   }
 
-  return events
+  // Ordenar eventos cronológicamente por timestamp
+  return events.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
 }
 
 /**

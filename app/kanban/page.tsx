@@ -321,15 +321,13 @@ export default function KanbanPage() {
                         <div
                           key={patient.id}
                           onClick={() => setTimelinePatient(patient)}
-                          className={`bg-card border rounded-lg p-3 cursor-pointer hover:shadow-lg transition-all ${
-                            hasAlerts ? "border-destructive/50 ring-2 ring-destructive/20" : "border-border"
-                          } ${
-                            patient.severity === "Crítico"
+                          className={`bg-card border rounded-lg p-3 cursor-pointer hover:shadow-lg transition-all flex flex-col min-h-[200px] ${hasAlerts ? "border-destructive/50 ring-2 ring-destructive/20" : "border-border"
+                            } ${patient.severity === "Crítico"
                               ? "ring-2 ring-destructive/30"
                               : patient.severity === "Urgente"
                                 ? "ring-2 ring-warning/30"
                                 : ""
-                          }`}
+                            }`}
                         >
                           {/* Patient Name & Severity */}
                           <div className="flex items-start justify-between mb-2">
@@ -340,75 +338,76 @@ export default function KanbanPage() {
                               </p>
                             </div>
                             <div
-                              className={`px-2 py-0.5 rounded text-xs font-semibold flex-shrink-0 ml-2 ${
-                                patient.severity === "Crítico"
-                                  ? "bg-destructive/20 text-destructive"
-                                  : patient.severity === "Urgente"
-                                    ? "bg-warning/20 text-warning"
-                                    : "bg-success/20 text-success"
-                              }`}
+                              className={`px-2 py-0.5 rounded text-xs font-semibold flex-shrink-0 ml-2 ${patient.severity === "Crítico"
+                                ? "bg-destructive/20 text-destructive"
+                                : patient.severity === "Urgente"
+                                  ? "bg-warning/20 text-warning"
+                                  : "bg-success/20 text-success"
+                                }`}
                             >
                               {patient.severity}
                             </div>
                           </div>
 
                           {/* Diagnosis */}
-                          <p className="text-xs text-foreground mb-2 line-clamp-2">
-                            {patient.diagnosis}
-                          </p>
+                          <div className="flex-grow">
+                            <p className="text-xs text-foreground mb-2 line-clamp-2">
+                              {patient.diagnosis}
+                            </p>
 
-                          {/* Time in Stage */}
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
-                            <Clock className="w-3 h-3" />
-                            <span>
-                              {timeInStage < 60
-                                ? `${timeInStage}m en esta etapa`
-                                : `${Math.floor(timeInStage / 60)}h ${timeInStage % 60}m en esta etapa`}
-                            </span>
-                          </div>
+                            {/* Time in Stage */}
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
+                              <Clock className="w-3 h-3" />
+                              <span>
+                                {timeInStage < 60
+                                  ? `${timeInStage}m en esta etapa`
+                                  : `${Math.floor(timeInStage / 60)}h ${timeInStage % 60}m en esta etapa`}
+                              </span>
+                            </div>
 
-                          {/* Studies Status */}
-                          {patient.studies.length > 0 && (
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2 text-xs">
-                                <div className="flex items-center gap-1">
-                                  <div className="w-2 h-2 rounded-full bg-primary" />
-                                  <span>{patient.studies.length} estudios</span>
+                            {/* Studies Status */}
+                            {patient.studies.length > 0 && (
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-xs">
+                                  <div className="flex items-center gap-1">
+                                    <div className="w-2 h-2 rounded-full bg-primary" />
+                                    <span>{patient.studies.length} estudios</span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2 text-xs flex-wrap">
+                                  {pendingStudies > 0 && (
+                                    <div className="flex items-center gap-1 text-destructive">
+                                      <div className="w-2 h-2 rounded-full bg-destructive" />
+                                      <span>{pendingStudies} pendiente{pendingStudies > 1 ? 's' : ''}</span>
+                                    </div>
+                                  )}
+                                  {inProgressStudies > 0 && (
+                                    <div className="flex items-center gap-1 text-warning">
+                                      <div className="w-2 h-2 rounded-full bg-warning" />
+                                      <span>{inProgressStudies} en proceso</span>
+                                    </div>
+                                  )}
+                                  {completedStudies > 0 && (
+                                    <div className="flex items-center gap-1 text-success">
+                                      <div className="w-2 h-2 rounded-full bg-success" />
+                                      <span>{completedStudies} completado{completedStudies > 1 ? 's' : ''}</span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
-                              <div className="flex items-center gap-2 text-xs flex-wrap">
-                                {pendingStudies > 0 && (
-                                  <div className="flex items-center gap-1 text-destructive">
-                                    <div className="w-2 h-2 rounded-full bg-destructive" />
-                                    <span>{pendingStudies} pendiente{pendingStudies > 1 ? 's' : ''}</span>
-                                  </div>
-                                )}
-                                {inProgressStudies > 0 && (
-                                  <div className="flex items-center gap-1 text-warning">
-                                    <div className="w-2 h-2 rounded-full bg-warning" />
-                                    <span>{inProgressStudies} en proceso</span>
-                                  </div>
-                                )}
-                                {completedStudies > 0 && (
-                                  <div className="flex items-center gap-1 text-success">
-                                    <div className="w-2 h-2 rounded-full bg-success" />
-                                    <span>{completedStudies} completado{completedStudies > 1 ? 's' : ''}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
+                            )}
 
-                          {/* Alert Indicator */}
-                          {hasAlerts && (
-                            <div className="mt-2 flex items-center gap-1 text-xs text-destructive font-medium">
-                              <AlertCircle className="w-3 h-3 animate-pulse" />
-                              <span>Resultado anormal</span>
-                            </div>
-                          )}
+                            {/* Alert Indicator */}
+                            {hasAlerts && (
+                              <div className="mt-2 flex items-center gap-1 text-xs text-destructive font-medium">
+                                <AlertCircle className="w-3 h-3 animate-pulse" />
+                                <span>Resultado anormal</span>
+                              </div>
+                            )}
+                          </div>
 
                           {/* Room & Doctor */}
-                          <div className="mt-2 pt-2 border-t border-border text-xs text-muted-foreground space-y-1">
+                          <div className="mt-auto pt-2 border-t border-border text-xs text-muted-foreground space-y-1">
                             <div className="flex items-center gap-1">
                               <User className="w-3 h-3" />
                               <span>{patient.room}</span>

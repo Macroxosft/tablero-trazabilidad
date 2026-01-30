@@ -16,3 +16,4 @@ pnpm-debug.log*
 .env.production.local
 .DS_Store
 .next/dev*
+.next/dev/static/chunks/e559b_next_dist_035a6e65._.js.map
